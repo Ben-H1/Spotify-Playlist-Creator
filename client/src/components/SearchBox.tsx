@@ -26,7 +26,7 @@ const SearchBox = ({ className, placeholder, searchHandler, useOnChange = true, 
             if (waitForChangeFinish) {
                 clearTimeout(changeTimer);
                 changeTimer = setInterval(() => {
-                    clearTimeout(changeTimer);
+                    clearInterval(changeTimer);
                     searchHandler && searchHandler(value);
                     setPreviousValue(value);
                 }, typingTimeoutMs);
@@ -55,7 +55,7 @@ const SearchBox = ({ className, placeholder, searchHandler, useOnChange = true, 
         <div className={clsx('py-2 px-4 w-full rounded-full bg-white text-black flex justify-center items-center', className)}>
             <FontAwesomeIcon className='mr-2' icon={faSearch} />
             <div className='grow'>
-                <input type='text' className='outline-none min-w-[auto] w-full' size={1} placeholder={placeholder} onChange={handleChange} onKeyDown={handleKeyDown} />
+                <input type='text' className='outline-none w-full' size={1} placeholder={placeholder} onChange={handleChange} onKeyDown={handleKeyDown} />
             </div>
             {/* {previousValue && <div className='ml-2'>
                 <FontAwesomeIcon className='cursor-pointer' icon={faClose} onClick={() => console.log('x')} />

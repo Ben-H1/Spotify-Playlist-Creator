@@ -52,9 +52,11 @@ const SearchBox = ({ className, placeholder, searchHandler, useOnChange = true, 
     };
 
     return (
-        <div className={clsx('py-2 px-4 rounded-full bg-white text-black flex justify-center items-center', className)}>
+        <div className={clsx('py-2 px-4 w-full rounded-full bg-white text-black flex justify-center items-center', className)}>
             <FontAwesomeIcon className='mr-2' icon={faSearch} />
-            <input type='text' className='outline-none flex-grow' placeholder={placeholder} onChange={handleChange} onKeyDown={handleKeyDown} />
+            <div className='grow'>
+                <input type='text' className='outline-none min-w-[auto] w-full' size={1} placeholder={placeholder} onChange={handleChange} onKeyDown={handleKeyDown} />
+            </div>
             {/* {previousValue && <div className='ml-2'>
                 <FontAwesomeIcon className='cursor-pointer' icon={faClose} onClick={() => console.log('x')} />
             </div>} */}

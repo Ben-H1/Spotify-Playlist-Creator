@@ -1,65 +1,59 @@
 import { faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
+import { Subject } from 'rxjs/internal/Subject';
 
 type SearchBoxProps = {
     className?: string;
     placeholder?: string;
     searchHandler: (value: string) => void;
-    useOnChange?: boolean;
     waitForChangeFinish?: boolean;
     timeoutMs?: number;
-    useOnEnter?: boolean;
 };
 
-const SearchBox = ({ className, placeholder, searchHandler, useOnChange = true, waitForChangeFinish, timeoutMs, useOnEnter = true }: SearchBoxProps) => {
-    const [previousValue, setPreviousValue] = useState<string>('');
+const inputChange = new Subject<string>();
+const inputChange$ = inputChange.asObservable();
 
-    let changeTimer: NodeJS.Timeout | undefined;
-    const typingTimeoutMs = timeoutMs ?? 1000;
+const SearchBox = ({ className, placeholder, searchHandler, waitForChangeFinish, timeoutMs }: SearchBoxProps) => {
+    const [currentValue, setCurrentValue] = useState<string>('');
+
+    const typingTimeoutMs = waitForChangeFinish ? timeoutMs ?? 500 : 0;
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
 
-        if (useOnChange) {
-            if (waitForChangeFinish) {
-                clearTimeout(changeTimer);
-                changeTimer = setInterval(() => {
-                    clearInterval(changeTimer);
-                    searchHandler && searchHandler(value);
-                    setPreviousValue(value);
-                }, typingTimeoutMs);
-            } else {
-                searchHandler && searchHandler(value);
-                setPreviousValue(value);
-            }
-        }
+        setCurrentValue(value);
+        inputChange.next(value);
     };
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-        const value = e.currentTarget.value;
-        
-        if (useOnEnter) {
-            if (e.key === 'Enter') {
-                if (value !== previousValue) {
-                    clearTimeout(changeTimer);
-                    searchHandler && searchHandler(value);
-                    setPreviousValue(value);
-                }
-            }
-        }
-    };
+    const handleClear = () => {
+        setCurrentValue('');
+        inputChange.next('');
+    }
+
+    useEffect(() => {
+        const subscription = inputChange$.pipe(
+            debounceTime(typingTimeoutMs),
+            distinctUntilChanged()
+        ).subscribe((value) => searchHandler(value));
+
+        return () => {
+            return subscription.unsubscribe();
+        };
+    }, []);
 
     return (
         <div className={clsx('py-2 px-4 w-full rounded-full bg-white text-black flex justify-center items-center', className)}>
             <FontAwesomeIcon className='mr-2' icon={faSearch} />
             <div className='grow'>
-                <input type='text' className='outline-none w-full' size={1} placeholder={placeholder} onChange={handleChange} onKeyDown={handleKeyDown} />
+                <input type='text' className='outline-none w-full' size={1} value={currentValue} placeholder={placeholder} onChange={handleChange} />
             </div>
-            {/* {previousValue && <div className='ml-2'>
-                <FontAwesomeIcon className='cursor-pointer' icon={faClose} onClick={() => console.log('x')} />
-            </div>} */}
+            {currentValue && <div className='ml-2'>
+                <FontAwesomeIcon className='cursor-pointer' icon={faClose} onClick={handleClear} />
+            </div>}
         </div>
     );
 };

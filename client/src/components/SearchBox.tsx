@@ -47,13 +47,13 @@ const SearchBox = ({ className, placeholder, searchHandler, waitForChangeFinish,
 
     return (
         <div className={clsx('py-2 px-4 w-full rounded-full bg-white text-black flex justify-center items-center', className)}>
-            <FontAwesomeIcon className='mr-2' icon={faSearch} />
+            <FontAwesomeIcon className='mr-2 h-5' fixedWidth icon={faSearch} />
             <div className='grow'>
                 <input type='text' className='outline-none w-full' size={1} value={currentValue} placeholder={placeholder} onChange={handleChange} />
             </div>
-            {currentValue && <div className='ml-2'>
-                <FontAwesomeIcon className='cursor-pointer' icon={faClose} onClick={handleClear} />
-            </div>}
+            {currentValue && <>
+                <FontAwesomeIcon className='cursor-pointer ml-2 h-5' icon={faClose} onClick={handleClear} />
+            </>}
         </div>
     );
 };

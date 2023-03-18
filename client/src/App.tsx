@@ -1,12 +1,13 @@
 import { createContext } from 'react';
+import ConfigContextProvider from './components/ConfigContextProvider';
 import LoginScreen from './components/LoginScreen';
 import MainScreen from './components/MainScreen';
 import UserInfo from './components/UserInfo';
 import { getAuthUrl } from './SpotifyWrapper';
 
-export const ApiContext = createContext(null as any);
+export const ApiContext = createContext({} as Record<string, any>);
 
-const getUrlParams = (url: any) => {
+const getUrlParams = (url: string) => {
     return url.split('/').slice(-1)[0].split('?').slice(-1)[0].split('&').reduce((paramsObj: Record<string, string>, paramString: string) => {
         const splitParam = paramString.split('=');
         paramsObj[splitParam[0]] = splitParam[1];
@@ -33,20 +34,22 @@ const App = () => {
 
     return (
         <ApiContext.Provider value={{ token }}>
-            <div className='p-4 h-screen from-ui-grayscale-300 via-ui-grayscale-100 to-ui-grayscale-100 bg-gradient-to-b text-white font-montserrat'>
-                {token && <>
-                    <UserInfo
-                        handleLogout={handleLogout}
-                    />
-                    <MainScreen />
-                </>}
-                {!token && <>
-                    <LoginScreen
-                        tokenExpired={tokenExpired}
-                        handleLogin={handleLogin}
-                    />
-                </>}
-            </div>
+            <ConfigContextProvider>
+                <div className='p-4 h-screen from-ui-grayscale-300 via-ui-grayscale-100 to-ui-grayscale-100 bg-gradient-to-b text-white font-montserrat'>
+                    {token && <>
+                        <UserInfo
+                            handleLogout={handleLogout}
+                        />
+                        <MainScreen />
+                    </>}
+                    {!token && <>
+                        <LoginScreen
+                            tokenExpired={tokenExpired}
+                            handleLogin={handleLogin}
+                        />
+                    </>}
+                </div>
+            </ConfigContextProvider>
         </ApiContext.Provider>
     );
 };

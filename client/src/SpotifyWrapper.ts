@@ -38,3 +38,13 @@ export const getMe = async (token: string) => {
         logOut();
     }
 };
+
+export const searchArtists = async (token: string, searchTerm: string) => {
+    spotifyClient.setAccessToken(token);
+
+    try {
+        return (await spotifyClient.searchArtists(searchTerm, { limit: 10 })).body?.artists?.items;
+    } catch (e) {
+        logOut();
+    }
+};

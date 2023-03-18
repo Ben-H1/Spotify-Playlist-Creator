@@ -1,7 +1,7 @@
 import { faArrowUpRightFromSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MouseEvent, useContext, useEffect, useState } from 'react';
-import BlankPic from './BlankProfilePic';
+import BlankPic from './BlankPic';
 import { ConfigContext } from './ConfigContextProvider';
 import Divider from './Divider';
 
@@ -32,9 +32,9 @@ const ArtistSearchResult = ({ artist }: any) => {
     return (
         <div className='p-2 hover:bg-ui-grayscale-500 flex items-center select-none' onClick={handleCheck}>
             {checked && <FontAwesomeIcon className='mr-2' icon={faCheck} />}
-            {artist.images[0] ? <img className='h-8 rounded-full mr-2 aspect-square object-cover' src={artist.images[0].url}></img> : <BlankPic className='h-8 mr-2' />}
-            <div className='grow'>{artist?.name}</div>
-            <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} />
+            {artist.images[0] ? <img className='h-10 rounded-full mr-2 aspect-square object-cover' src={artist.images[0].url}></img> : <BlankPic className='!h-10 mr-2' />}
+            <div className='grow truncate' title={artist?.name}>{artist?.name}</div>
+            <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} title='Open in Spotify' />
         </div>
     );
 };

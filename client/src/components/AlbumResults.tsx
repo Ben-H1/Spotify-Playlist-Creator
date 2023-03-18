@@ -1,7 +1,7 @@
 import { faArrowUpRightFromSquare, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MouseEvent } from 'react';
-import BlankPic from './BlankProfilePic';
+import BlankPic from './BlankPic';
 import Divider from './Divider';
 
 const AlbumResult = ({ album }: any) => {
@@ -11,10 +11,13 @@ const AlbumResult = ({ album }: any) => {
     };
 
     return (
-        <div className='p-2 hover:bg-ui-grayscale-500 flex items-center select-none'>
-            {album.images[0] ? <img className='h-8 mr-2 aspect-square object-cover' src={album.images[0].url}></img> : <BlankPic icon={faMusic} className='h-8 mr-2 rounded-none' />}
-            <div className='grow'>{album?.name}</div>
-            <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} />
+        <div className='p-2 flex items-center select-none'>
+            {album.images[0] ? <img className='h-10 mr-2 aspect-square object-cover' src={album.images[0].url}></img> : <BlankPic icon={faMusic} className='!h-10 mr-2 rounded-none' />}
+            <div className='grow flex flex-col truncate'>
+                <div className='w-full truncate' title={album?.name}>{album?.name}</div>
+                <div className='text-xs brightness-75 w-full truncate' title={album?.artists?.map((a: any) => a.name).join(', ')}>{album?.artists?.map((a: any) => a.name).join(', ')}</div>
+            </div>
+            <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} title='Open in Spotify' />
         </div>
     );
 };

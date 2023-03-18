@@ -4,7 +4,7 @@ import { ClickAwayListener } from '@mui/base';
 import { useContext, useEffect, useState } from 'react';
 import { ApiContext } from '../App';
 import { getMe } from '../SpotifyWrapper';
-import BlankPic from './BlankProfilePic';
+import BlankPic from './BlankPic';
 import LoadingSpinner from './LoadingSpinner';
 
 type UserInfoProps = {

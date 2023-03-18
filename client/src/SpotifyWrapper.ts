@@ -1,4 +1,5 @@
 import SpotifyWebApi from 'spotify-web-api-node';
+import { AlbumTypes } from './components/ConfigContextProvider';
 
 const clientId = '4b34c2f1948747ff86262701df460164';
 const redirectUri = 'http://localhost:5173/';
@@ -49,10 +50,10 @@ export const searchArtists = async (token: string, searchTerm: string) => {
     }
 };
 
-export const getMultipleArtistAlbums = async (token: string, artistIds: string[]) => {
+export const getMultipleArtistAlbums = async (token: string, artistIds: string[], albumTypes: AlbumTypes[]) => {
     try {
         const promises = artistIds.map(async (artistId) => {
-            return getArtistAlbums(token, artistId);
+            return getArtistAlbums(token, artistId, albumTypes);
         });
 
         return (await Promise.all(promises)).flat();
@@ -61,7 +62,7 @@ export const getMultipleArtistAlbums = async (token: string, artistIds: string[]
     }
 };
 
-export const getArtistAlbums = async (token: string, artistId: string) => {
+export const getArtistAlbums = async (token: string, artistId: string, albumTypes: AlbumTypes[]) => {
     spotifyClient.setAccessToken(token);
 
     try {
@@ -71,7 +72,7 @@ export const getArtistAlbums = async (token: string, artistId: string) => {
         let offset = 0;
     
         do {
-            const options = { limit, offset };
+            const options = { limit, offset, 'album_type': albumTypes.join(',') };
             const res = (await spotifyClient.getArtistAlbums(artistId, options)).body;
             albums.push(...res.items);
             offset += limit;

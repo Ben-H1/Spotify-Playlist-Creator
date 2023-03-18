@@ -3,12 +3,12 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
-type BlankProfilePicProps = {
+type BlankPicProps = {
     className?: string;
     icon?: IconProp;
 };
 
-const BlankPic = ({ className, icon }: BlankProfilePicProps) => {
+const BlankPic = ({ className, icon }: BlankPicProps) => {
     return (
         <div className={clsx('h-full aspect-square rounded-full bg-no-pic flex items-center justify-center', className)}>
             <FontAwesomeIcon

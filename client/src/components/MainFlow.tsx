@@ -14,7 +14,7 @@ const MainFlow = () => {
     const previousPanel = () => setIndex(i => i - 1);
 
     return (
-        <div className='bg-black rounded-lg h-content w-content shadow-lg shadow-black p-4 w-96'>
+        <div className='bg-black rounded-lg h-content w-content shadow-lg shadow-black p-4 w-1/2'>
             <Accordion index={index} setIndex={setIndex} allowClick={false} variant='single'>
             {/* <Accordion variant='multi'> */}
                 <AccordionItem title='Step 1 - Search for artists' className='mb-2' titleClassName='font-bold'>

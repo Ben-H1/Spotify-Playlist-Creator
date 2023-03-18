@@ -31,7 +31,7 @@ type AccordionItemProps = SingleAccordionItemProps | MultiAccordionItemProps;
 const AccordionItem = ({ title, children, className, titleClassName, open, handleClick, variant, allowClick }: AccordionItemProps) => {
     const [isOpen, setIsOpen] = useState(open ?? false);
 
-    const [ref, { height }] = useMeasure();
+    const [ref, { height, width }] = useMeasure();
 
     let props;
     if (variant === 'single') {

@@ -28,7 +28,7 @@ const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
         AlbumTypes.APPEARS_ON,
         AlbumTypes.COMPILATION
     ]);
-    const [albums, setAlbums] = useState<Record<string, any>>({});
+    const [albums, setAlbums] = useState<Record<string, SpotifyApi.AlbumObjectFull>>({});
 
     return (
         <ConfigContext.Provider value={{ artists, setArtists, includeAlbumTypes, setIncludeAlbumTypes, albums, setAlbums }}>

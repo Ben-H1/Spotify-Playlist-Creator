@@ -58,7 +58,7 @@ export const getMultipleArtistAlbums = async (token: string, artistIds: string[]
 
         return (await Promise.all(promises)).flat();
     } catch (e) {
-        // logOut();
+        logOut();
     }
 };
 

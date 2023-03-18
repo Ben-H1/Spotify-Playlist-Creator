@@ -1,13 +1,9 @@
 import { faArrowUpRightFromSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MouseEvent, useContext, useEffect, useState } from 'react';
+import BlankPic from './BlankProfilePic';
 import { ConfigContext } from './ConfigContextProvider';
-
-const Divider = () => {
-    return (
-        <div className='w-full block bg-white h-px my-2'></div>
-    );
-};
+import Divider from './Divider';
 
 const ArtistSearchResult = ({ artist }: any) => {
     const { artists, setArtists } = useContext(ConfigContext);
@@ -30,14 +26,14 @@ const ArtistSearchResult = ({ artist }: any) => {
 
     const handleOpen = (e: MouseEvent<SVGSVGElement>) => {
         e.stopPropagation();
-        window.open(artist.external_urls.spotify);
+        window.open(artist?.external_urls?.spotify);
     };
 
     return (
         <div className='p-2 hover:bg-ui-grayscale-500 flex items-center select-none' onClick={handleCheck}>
             {checked && <FontAwesomeIcon className='mr-2' icon={faCheck} />}
-            <img className='h-8 rounded-full mr-2 aspect-square object-cover' src={artist.images[0].url}></img>
-            <div className='grow'>{artist.name}</div>
+            {artist.images[0] ? <img className='h-8 rounded-full mr-2 aspect-square object-cover' src={artist.images[0].url}></img> : <BlankPic className='h-8 mr-2' />}
+            <div className='grow'>{artist?.name}</div>
             <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} />
         </div>
     );
@@ -46,13 +42,20 @@ const ArtistSearchResult = ({ artist }: any) => {
 const ArtistSearchResults = ({ searchResults }: any) => {
     return (
         <div>
-            {searchResults.map((artist: any) => {
-                return (
-                    <ArtistSearchResult artist={artist} />
-                );
-            }).reduce((p: any, c: any) => {
-                return [p, <Divider />, c];
-            })}
+            {searchResults.length === 0 && <>
+                <div className='flex justify-center items-center'>
+                    <div>No results</div>
+                </div>
+            </>}
+            {searchResults.length > 0 && <>
+                {searchResults.map((artist: any) => {
+                    return (
+                        <ArtistSearchResult artist={artist} key={artist.id} />
+                    );
+                }).reduce((p: any, c: any) => {
+                    return [p, <Divider key={null} />, c];
+                })}
+            </>}
         </div>
     );
 };

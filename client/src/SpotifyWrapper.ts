@@ -48,3 +48,38 @@ export const searchArtists = async (token: string, searchTerm: string) => {
         logOut();
     }
 };
+
+export const getMultipleArtistAlbums = async (token: string, artistIds: string[]) => {
+    try {
+        const promises = artistIds.map(async (artistId) => {
+            return getArtistAlbums(token, artistId);
+        });
+
+        return (await Promise.all(promises)).flat();
+    } catch (e) {
+        // logOut();
+    }
+};
+
+export const getArtistAlbums = async (token: string, artistId: string) => {
+    spotifyClient.setAccessToken(token);
+
+    try {
+        const albums = [];
+        let loop = true;
+        let limit = 50;
+        let offset = 0;
+    
+        do {
+            const options = { limit, offset };
+            const res = (await spotifyClient.getArtistAlbums(artistId, options)).body;
+            albums.push(...res.items);
+            offset += limit;
+            loop = !!res.next;
+        } while (loop);
+    
+        return albums;
+    } catch (e) {
+        logOut();
+    }
+};

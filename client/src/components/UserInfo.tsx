@@ -4,7 +4,7 @@ import { ClickAwayListener } from '@mui/base';
 import { useContext, useEffect, useState } from 'react';
 import { ApiContext } from '../App';
 import { getMe } from '../SpotifyWrapper';
-import BlankProfilePic from './BlankProfilePic';
+import BlankPic from './BlankProfilePic';
 import LoadingSpinner from './LoadingSpinner';
 
 type UserInfoProps = {
@@ -37,7 +37,7 @@ const UserInfo = ({ handleLogout }: UserInfoProps) => {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >
                 {info && <>
-                    {info.images[0] ? <img className='h-full rounded-full' src={info.images[0].url}></img> : <BlankProfilePic />}
+                    {info.images[0] ? <img className='h-full rounded-full' src={info.images[0].url}></img> : <BlankPic />}
                     <div className='grow flex items-center justify-center mx-3'>
                         <div className='font-bold'>{info.display_name}</div>
                     </div>

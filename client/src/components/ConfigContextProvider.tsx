@@ -2,11 +2,16 @@ import { createContext, useState } from 'react';
 
 export const ConfigContext = createContext<any>(null);
 
-const ConfigContextProvider = ({ children }: any) => {
-    const [artists, setArtists] = useState<any>({});
+type ConfigContextProviderProps = {
+    children?: any;
+};
+
+const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
+    const [artists, setArtists] = useState<Record<string, SpotifyApi.ArtistObjectFull>>({});
+    const [albums, setAlbums] = useState<Record<string, any>>({});
 
     return (
-        <ConfigContext.Provider value={{ artists, setArtists }}>
+        <ConfigContext.Provider value={{ artists, setArtists, albums, setAlbums }}>
             {children}
         </ConfigContext.Provider>
     );

@@ -6,13 +6,14 @@ type ButtonProps = {
     className?: string;
     onClick?: MouseEventHandler,
     variant?: 'primary' | 'secondary';
+    disabled?: boolean;
 };
 
-const Button = ({ value, className, onClick, variant }: ButtonProps) => {
+const Button = ({ value, className, onClick, variant, disabled }: ButtonProps) => {
     const commonClasses = clsx(
         'py-2 px-4 rounded-full my-2 font-bold',
-        'hover:scale-103',
-        'active:scale-100'
+        !disabled && 'hover:scale-103',
+        !disabled && 'active:scale-100'
     );
 
     let uniqueClasses;
@@ -21,16 +22,18 @@ const Button = ({ value, className, onClick, variant }: ButtonProps) => {
         case 'secondary': {
             uniqueClasses = clsx(
                 'text-white outline outline-1',
-                'hover:outline-2',
-                'active:text-ui-grayscale-600 active:outline-ui-grayscale-500 active:outline-1'
+                !disabled && 'hover:outline-2',
+                !disabled && 'active:text-ui-grayscale-600 active:outline-ui-grayscale-500 active:outline-1',
+                disabled && 'brightness-50'
             );
             break;
         }
         default: {
             uniqueClasses = clsx(
                 'bg-ui-green text-black',
-                'hover:bg-ui-green-light',
-                'active:bg-ui-green-dark'
+                !disabled && 'hover:bg-ui-green-light',
+                !disabled && 'active:bg-ui-green-dark',
+                disabled && 'brightness-50'
             );
             break;
         }
@@ -40,6 +43,7 @@ const Button = ({ value, className, onClick, variant }: ButtonProps) => {
         <button
             className={clsx(commonClasses, uniqueClasses, className)}
             onClick={onClick}
+            disabled={disabled}
         >
             {value}
         </button>

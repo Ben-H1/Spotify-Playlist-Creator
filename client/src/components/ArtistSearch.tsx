@@ -38,7 +38,7 @@ const ArtistSearch = () => {
             {searchState !== SearchStates.NONE && <>
                 <div className='bg-ui-grayscale-400 w-full rounded-lg mt-2 p-2'>
                     {searchState === SearchStates.LOADING && <>
-                        <div className='flex justify-center items-center h-10'>
+                        <div className='flex justify-center items-center'>
                             <LoadingSpinner className='h-5' />
                         </div>
                     </>}
@@ -48,6 +48,7 @@ const ArtistSearch = () => {
                 </div>
             </>}
             {Object.keys(artists).length > 0 && <>
+                <div className='mt-2'>Selected artists</div>
                 <div className='bg-ui-grayscale-400 w-full rounded-lg mt-2 p-2'>
                     <ArtistSearchResults searchResults={Object.values(artists)} />
                 </div>

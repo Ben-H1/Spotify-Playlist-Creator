@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 
-export const ConfigContext = createContext<any>({});
+export const ConfigContext = createContext<any>(null);
 
 const ConfigContextProvider = ({ children }: any) => {
     const [artists, setArtists] = useState<any>({});

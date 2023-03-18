@@ -1,6 +1,6 @@
 import { faArrowUpRightFromSquare, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MouseEvent, useContext, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { ConfigContext } from './ConfigContextProvider';
 
 const Divider = () => {
@@ -12,6 +12,8 @@ const Divider = () => {
 const ArtistSearchResult = ({ artist }: any) => {
     const { artists, setArtists } = useContext(ConfigContext);
     const [checked, setChecked] = useState<boolean>(Object.keys(artists).includes(artist.id));
+
+    useEffect(() => setChecked(Object.keys(artists).includes(artist.id)), [artists]);
 
     const handleCheck = () => {
         const nextState = !checked;

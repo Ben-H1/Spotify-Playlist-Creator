@@ -42,16 +42,21 @@ const AlbumType = ({ type }: any) => {
 
 const AlbumSelect = ({ isOpen }: any) => {
     const { token } = useContext(ApiContext);
-    const { artists, includeAlbumTypes } = useContext(ConfigContext);
+    const { artists, includeAlbumTypes, albums, setAlbums } = useContext(ConfigContext);
 
     const [searchState, setSearchState] = useState<SearchStates>(SearchStates.NONE);
-    const [albumResults, setAlbumResults] = useState<any>();
 
     useEffect(() => {
         if (isOpen && Object.keys(artists).length > 0) {
             setSearchState(SearchStates.LOADING);
             getMultipleArtistAlbums(token, Object.keys(artists), includeAlbumTypes).then((albums) => {
-                setAlbumResults(albums);
+                let albumsObj: any = {};
+                albums?.forEach((album) => {
+                    if (album) {
+                        albumsObj[album.id] = album;
+                    }
+                });
+                setAlbums(albumsObj);
                 setSearchState(SearchStates.COMPLETE);
             });
         } else {
@@ -69,7 +74,7 @@ const AlbumSelect = ({ isOpen }: any) => {
                 <AlbumType type={AlbumTypes.COMPILATION} />
             </div>
             {searchState !== SearchStates.NONE && <>
-                <div className='mt-2'>{`Included albums: ${albumResults?.length}`}</div>
+                <div className='mt-2'>{`Included albums: ${Object.keys(albums).length}`}</div>
                 <div className='bg-ui-grayscale-400 w-full rounded-lg mt-2 p-2'>
                     {searchState === SearchStates.LOADING && <>
                         <div className='flex justify-center items-center'>
@@ -77,7 +82,7 @@ const AlbumSelect = ({ isOpen }: any) => {
                         </div>
                     </>}
                     {searchState === SearchStates.COMPLETE && <>
-                        <AlbumResults searchResults={Object.values(albumResults)} />
+                        <AlbumResults searchResults={Object.values(albums)} />
                     </>}
                 </div>
             </>}

@@ -20,6 +20,10 @@ export const getAlbumTypeName = (typeName: string) => ({
     [AlbumTypes.COMPILATION]: 'Compilation'
 })[typeName];
 
+export enum SortTypes {
+
+}
+
 const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
     const [artists, setArtists] = useState<Record<string, SpotifyApi.ArtistObjectFull>>({});
     const [includeAlbumTypes, setIncludeAlbumTypes] = useState<AlbumTypes[]>([
@@ -29,9 +33,15 @@ const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
         AlbumTypes.COMPILATION
     ]);
     const [albums, setAlbums] = useState<Record<string, SpotifyApi.AlbumObjectFull>>({});
+    const [tracks, setTracks] = useState<Record<string, SpotifyApi.TrackObjectFull>>({});
 
     return (
-        <ConfigContext.Provider value={{ artists, setArtists, includeAlbumTypes, setIncludeAlbumTypes, albums, setAlbums }}>
+        <ConfigContext.Provider value={{
+            artists, setArtists,
+            includeAlbumTypes, setIncludeAlbumTypes,
+            albums, setAlbums,
+            tracks, setTracks
+        }}>
             {children}
         </ConfigContext.Provider>
     );

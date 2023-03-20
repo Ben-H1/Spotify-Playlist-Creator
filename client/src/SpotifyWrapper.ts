@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import SpotifyWebApi from 'spotify-web-api-node';
+import { ApiContext } from './App';
 import { AlbumTypes } from './components/ConfigContextProvider';
 
 const clientId = '4b34c2f1948747ff86262701df460164';
@@ -80,6 +82,62 @@ export const getArtistAlbums = async (token: string, artistId: string, albumType
         } while (loop);
     
         return albums;
+    } catch (e) {
+        logOut();
+    }
+};
+
+export const getMultipleAlbumTracks = async (token: string, albums: SpotifyApi.AlbumObjectFull[]) => {
+    try {
+        const promises = albums.map(async (album) => {
+            return getAlbumTracks(token, album);
+        });
+
+        return (await Promise.all(promises)).flat();
+    } catch (e) {
+        logOut();
+    }
+};
+
+export const getAlbumTracks = async (token: string, album: SpotifyApi.AlbumObjectFull) => {
+    spotifyClient.setAccessToken(token);
+
+    try {
+        const songs = [];
+        let loop = true;
+        let limit = 50;
+        let offset = 0;
+
+        do {
+            const options = { limit, offset };
+            const res = (await spotifyClient.getAlbumTracks(album.id, options)).body;
+            const items = res.items.map((track) => ({ ...track, album }));
+            songs.push(...items);
+            offset += limit;
+            loop = !!res.next;
+        } while (loop);
+
+        return songs;
+    } catch (e) {
+        logOut();
+    }
+};
+
+export const createPlaylist = async (token: string, title: string, options: any) => {
+    spotifyClient.setAccessToken(token);
+
+    try {
+        return (await spotifyClient.createPlaylist(title, options)).body;
+    } catch (e) {
+        logOut();
+    }
+};
+
+export const addTracksToPlaylist = async (token: string, playlistId: string, trackIds: string[]) => {
+    spotifyClient.setAccessToken(token);
+
+    try {
+        return (await spotifyClient.addTracksToPlaylist(playlistId, trackIds.map(id => `spotify:track:${id}`))).body;
     } catch (e) {
         logOut();
     }

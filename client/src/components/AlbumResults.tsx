@@ -14,8 +14,8 @@ const AlbumResult = ({ album }: any) => {
         <div className='p-2 flex items-center select-none'>
             {album.images[0] ? <img className='h-10 mr-2 aspect-square object-cover' src={album.images[0].url}></img> : <BlankPic icon={faMusic} className='!h-10 mr-2 rounded-none' />}
             <div className='grow flex flex-col truncate'>
-                <div className='w-full truncate' title={album?.name}>{album?.name}</div>
-                <div className='text-xs brightness-75 w-full truncate' title={album?.artists?.map((a: any) => a.name).join(', ')}>{album?.artists?.map((a: any) => a.name).join(', ')}</div>
+                <div className='truncate' title={album?.name}>{album?.name}</div>
+                <div className='text-xs brightness-75 truncate' title={album?.artists?.map((a: any) => a.name).join(', ')}>{album?.artists?.map((a: any) => a.name).join(', ')}</div>
             </div>
             <FontAwesomeIcon className='ml-2 cursor-pointer' icon={faArrowUpRightFromSquare} onClick={handleOpen} title='Open in Spotify' />
         </div>
